@@ -1,29 +1,30 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Footer from "../../components/Footer";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("");
+  const [sentOk, setSentOk] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        body: JSON.stringify(form),
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       });
-
       const data = await res.json();
-
       if (data.success) {
-        setStatus("Message sent successfully!");
+        setStatus("Message sent!");
+        setSentOk(true);
         setForm({ name: "", email: "", message: "" });
+        setTimeout(() => setSentOk(false), 3500);
       } else {
-        setStatus("Failed to send message.");
+        setStatus("Failed to send.");
       }
     } catch (err) {
       setStatus("Error sending message.");
@@ -31,78 +32,32 @@ export default function Contact() {
   };
 
   return (
-    <main className="bg-black text-white min-h-screen px-6 py-20 flex flex-col items-center">
-      <motion.h1
-        initial={{ opacity: 0, y: -50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="text-5xl font-bold mb-6 text-red-700"
-      >
-        Contact Us
-      </motion.h1>
+    <main className="bg-black text-white min-h-screen px-6 py-20">
+      <div className="max-w-xl mx-auto">
+        <h1 className="text-4xl font-bold text-red-600 mb-4 text-center">Contact</h1>
+        <p className="text-gray-400 text-center mb-6">Send your enquiry and we’ll get back to you.</p>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 1 }}
-        className="text-gray-400 text-lg mb-8 max-w-xl text-center"
-      >
-        Got a project in mind? Send us a message and we’ll get back to you ASAP!
-      </motion.p>
+        <motion.form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <motion.input value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} placeholder="Your name" className="bg-gray-900 border border-gray-800 px-4 py-2 rounded" required />
+          <motion.input value={form.email} onChange={(e)=>setForm({...form, email:e.target.value})} type="email" placeholder="Your email" className="bg-gray-900 border border-gray-800 px-4 py-2 rounded" required />
+          <motion.textarea value={form.message} onChange={(e)=>setForm({...form, message:e.target.value})} placeholder="Message" rows={6} className="bg-gray-900 border border-gray-800 px-4 py-2 rounded" required />
+          <motion.button whileHover={{ scale: 1.03 }} className="bg-red-700 px-5 py-3 rounded text-white">Send Message</motion.button>
+        </motion.form>
 
-      <motion.form
-        onSubmit={handleSubmit}
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="flex flex-col gap-4 w-full max-w-md"
-      >
-        <motion.input
-          type="text"
-          placeholder="Your Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-700"
-          whileFocus={{ scale: 1.02 }}
-          required
-        />
-        <motion.input
-          type="email"
-          placeholder="Your Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-700"
-          whileFocus={{ scale: 1.02 }}
-          required
-        />
-        <motion.textarea
-          placeholder="Your Message"
-          value={form.message}
-          onChange={(e) => setForm({ ...form, message: e.target.value })}
-          className="px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-700"
-          rows={5}
-          whileFocus={{ scale: 1.02 }}
-          required
-        />
-        <motion.button
-          type="submit"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 bg-red-700 text-white rounded-xl shadow-lg hover:bg-red-600 transition"
-        >
-          Send Message
-        </motion.button>
-      </motion.form>
+        {status && <div className="mt-4 text-gray-400">{status}</div>}
+      </div>
 
-      {status && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mt-4 text-gray-400"
-        >
-          {status}
-        </motion.p>
+      <Footer />
+
+      {/* Success modal */}
+      {sentOk && (
+        <motion.div initial={{ opacity:0, scale:0.8 }} animate={{ opacity:1, scale:1 }} exit={{ opacity:0 }} className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-gray-900 border border-gray-700 rounded-xl p-8 shadow-2xl text-center">
+            <h3 className="text-xl font-bold mb-2 text-white">Message sent</h3>
+            <p className="text-gray-400 mb-4">Thanks! We’ll get back to you shortly.</p>
+            <a href="mailto:ntakazezulutrading@gmail.com" className="inline-block px-4 py-2 bg-red-700 rounded text-white">Contact via Email</a>
+          </div>
+        </motion.div>
       )}
     </main>
   );
