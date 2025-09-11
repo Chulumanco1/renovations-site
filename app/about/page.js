@@ -6,9 +6,9 @@ export default function About() {
   return (
     <main className="bg-black text-white min-h-screen px-6 py-20">
       <div className="max-w-4xl mx-auto text-center">
-        <motion.h1 initial={{ opacity:0, y:-20 }} animate={{ opacity:1, y:0 }} className="text-4xl font-bold text-red-600 mb-6">About Ntakezulu Trading</motion.h1>
+        <motion.h1 initial={{ opacity:0, y:-20 }} animate={{ opacity:1, y:0 }} className="text-4xl font-bold text-red-600 mb-6">About Ntakazezulu Trading</motion.h1>
         <motion.p initial={{ opacity:0 }} whileInView={{ opacity:1 }} className="text-gray-400">
-          Ntakezulu Trading provides professional services across paving, building, plumbing, security camera installation, aluminium fabrication, painting, solar systems, built-in systems and design ceilings. We operate from:
+          Ntakazezulu Trading provides professional services across paving, building, plumbing, security camera installation, aluminium fabrication, painting, solar systems, built-in systems and design ceilings. We operate from:
           <br /><strong>30 Ostritch Street, Southernwood, Mthatha, 5099</strong>
         </motion.p>
 

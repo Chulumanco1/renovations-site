@@ -27,7 +27,7 @@ export default function Navbar() {
       <Link href="/" className="flex items-center space-x-2">
         <img src="/logo.jpg" alt="Logo" className="h-8 w-8" />
         <span className="font-bold text-gray-800 dark:text-white">
-          NtakazeZulu
+          Ntakazezulu
         </span>
       </Link>
 
